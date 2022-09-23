@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <base href="/">
+    <title>CPU Usage</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+    <!-- 添加动态评论   -->
+    <script>
+
+        function startRecord(){
+            $.ajax({
+                url:"/CPU",
+                type:"GET",
+                async:true,
+                success:function (data){
+                    alert("开始监控");
+                    startFlush();
+                }
+            })
+        }
+
+        function startFlush(){
+            setInterval(getResult,1000);
+        }
+
+        function getResult(){
+
+            $.ajax({
+                url:"/result",
+                type:"GET",
+                async: true,
+                success:function(data){
+                    console.log(data);
+                    for(let i=0;i<data.length;i++){
+                        $("#list").append("<li>"+data[i]+"</li>");
+                    }
+                }
+            });
+
+        }
+    </script>
+</head>
+
+<body>
+    <div>
+        <button onclick="startRecord()">
+            开始记录
+        </button>
+        <ul id="list">
+            <li><pre>时间               CPU使用率</pre></li>
+        </ul>
+    </div>
+</body>
+</html>
